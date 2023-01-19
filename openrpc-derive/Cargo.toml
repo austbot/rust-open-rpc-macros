@@ -3,6 +3,7 @@ name = "open-rpc-derive"
 version = "0.0.1"
 authors = ["me@austbot.com","fikgol <hit.cs.lijun@gmail.com>"]
 edition = "2021"
+license = "MIT"
 
 [dependencies]
 proc-macro2 = {version = "1.0.49"}
