@@ -4,6 +4,7 @@ version = "0.0.1"
 authors = ["me@austbot.com","fikgol <hit.cs.lijun@gmail.com>"]
 edition = "2021"
 license = "MIT"
+description = "OpenRPC Schema Generator"
 
 [dependencies]
 schemars = "0.8.11"
