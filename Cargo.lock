@@ -15,10 +15,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fad582f4b9e86b6caa621cabeb0963332d92eea04729ab12892c2533951e6440"
 
 [[package]]
-name = "openrpc-derive"
-version = "0.1.0"
+name = "open-rpc-derive"
+version = "0.0.1"
 dependencies = [
- "openrpc-schema",
+ "open-rpc-schema",
  "proc-macro2",
  "quote",
  "serde",
@@ -27,8 +27,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "openrpc-schema"
-version = "0.1.0"
+name = "open-rpc-schema"
+version = "0.0.1"
 dependencies = [
  "schemars",
  "schemars_derive",
