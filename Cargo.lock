@@ -16,7 +16,7 @@ checksum = "fad582f4b9e86b6caa621cabeb0963332d92eea04729ab12892c2533951e6440"
 
 [[package]]
 name = "open-rpc-derive"
-version = "0.0.1"
+version = "0.0.3"
 dependencies = [
  "open-rpc-schema",
  "proc-macro2",
@@ -28,7 +28,7 @@ dependencies = [
 
 [[package]]
 name = "open-rpc-schema"
-version = "0.0.1"
+version = "0.0.3"
 dependencies = [
  "schemars",
  "schemars_derive",

@@ -40,7 +40,7 @@ impl RpcMethodAttribute {
         let attrs = method
             .attrs
             .iter()
-            .filter_map(|attr| Self::parse_meta(attr, &output))
+            .filter_map(|attr| Self::parse_meta(attr, &output, method))
             .collect::<Result<Vec<_>>>()?;
 
         if attrs.len() <= 1 {
@@ -53,6 +53,7 @@ impl RpcMethodAttribute {
     fn parse_meta(
         attr: &syn::Attribute,
         output: &syn::ReturnType,
+        method: &syn::TraitItemMethod
     ) -> Option<Result<RpcMethodAttribute>> {
         match attr.parse_meta().and_then(validate_attribute_meta) {
             Ok(ref meta) => {
@@ -64,7 +65,8 @@ impl RpcMethodAttribute {
                     kind.and_then(|kind| {
                         get_meta_list(meta)
                             .and_then(|ml| get_name_value(RPC_NAME_KEY, ml))
-                            .map_or(Err(Error::new_spanned(attr, MISSING_NAME_ERR)), |name| {
+                            .or(Some(method.sig.ident.to_string()))
+                            .map_or_else(||Err(Error::new_spanned(attr, MISSING_NAME_ERR)), |name| {
                                 let aliases =
                                     get_meta_list(&meta).map_or(Vec::new(), |ml| get_aliases(ml));
                                 let raw_params = get_meta_list(meta)

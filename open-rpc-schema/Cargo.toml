@@ -1,6 +1,6 @@
 [package]
 name = "open-rpc-schema"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["me@austbot.com","fikgol <hit.cs.lijun@gmail.com>"]
 edition = "2021"
 license = "MIT"

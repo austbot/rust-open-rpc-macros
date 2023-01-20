@@ -16,3 +16,8 @@ pub fn document_rpc(_args: TokenStream, input: TokenStream) -> TokenStream {
     };
     output
 }
+
+#[proc_macro_attribute]
+pub fn rpc(_args: TokenStream, input: TokenStream) -> TokenStream {
+    input
+}
