@@ -11,6 +11,7 @@ pub struct RpcMethodAttribute {
     pub name: String,
     pub aliases: Vec<String>,
     pub kind: AttributeKind,
+    pub summary: String,
     pub params_style: Option<ParamStyle>, // None means do not override the top level default
 }
 
@@ -29,7 +30,7 @@ const METADATA_META_WORD: &str = "meta";
 const RAW_PARAMS_META_WORD: &str = "raw_params"; // to be deprecated and replaced with `params = "raw"`
 const RETURNS_META_WORD: &str = "returns";
 const PARAMS_STYLE_KEY: &str = "params";
-
+const SUMMARY: &str = "summary";
 const MULTIPLE_RPC_ATTRIBUTES_ERR: &str = "Expected only a single rpc attribute per method";
 const INVALID_ATTR_PARAM_NAMES_ERR: &str = "Invalid attribute parameter(s):";
 const MISSING_NAME_ERR: &str = "rpc attribute should have a name e.g. `name = \"method_name\"`";
@@ -67,25 +68,21 @@ impl RpcMethodAttribute {
                             .and_then(|ml| get_name_value(RPC_NAME_KEY, ml))
                             .or(Some(method.sig.ident.to_string()))
                             .map_or_else(||Err(Error::new_spanned(attr, MISSING_NAME_ERR)), |name| {
+                                let meta = get_meta_list(&meta);
                                 let aliases =
-                                    get_meta_list(&meta).map_or(Vec::new(), |ml| get_aliases(ml));
-                                let raw_params = get_meta_list(meta)
-                                    .map_or(false, |ml| has_meta_word(RAW_PARAMS_META_WORD, ml));
-                                let params_style = match raw_params {
-                                    true => {
-                                        // "`raw_params` will be deprecated in a future release. Use `params = \"raw\" instead`"
-                                        Ok(Some(ParamStyle::Raw))
-                                    }
-                                    false => get_meta_list(meta).map_or(Ok(None), |ml| {
-                                        get_params_style(ml).map(|s| Some(s))
-                                    }),
-                                }?;
+                                    meta.map_or(Vec::new(), |ml| get_aliases(ml));
+                                let summary = meta.map_or(String::new(), |ml| get_name_value(SUMMARY, ml).unwrap_or_default());
+                                let params_style = meta.map_or(Ok(None), |ml| {
+                                    get_params_style(ml).map(|s| Some(s))
+                                })?;
+                            
                                 Ok(RpcMethodAttribute {
                                     attr: attr.clone(),
                                     name,
                                     aliases,
                                     kind,
                                     params_style,
+                                    summary
                                 })
                             })
                     })
@@ -154,7 +151,7 @@ fn validate_attribute_meta(meta: syn::Meta) -> Result<syn::Meta> {
             validate_idents(
                 &meta,
                 &visitor.name_value_names,
-                &[RPC_NAME_KEY, RETURNS_META_WORD, PARAMS_STYLE_KEY],
+                &[RPC_NAME_KEY, RETURNS_META_WORD, PARAMS_STYLE_KEY, SUMMARY],
             )?;
             validate_idents(&meta, &visitor.meta_list_names, &[ALIASES_KEY])
         }

@@ -8,8 +8,7 @@ pub fn generate_schema_method(methods: &[MethodRegistration]) -> Result<syn::Imp
     for method in methods {
         match method {
             MethodRegistration::Standard { method, .. } => {
-                let _attrs = get_doc_comments(&method.trait_item.attrs);
-
+            
                 let rpc_name = method.name();
                 let args = compute_args(&method.trait_item);
                 let arg_names = compute_arg_identifiers(&args)?;
@@ -30,6 +29,7 @@ pub fn generate_schema_method(methods: &[MethodRegistration]) -> Result<syn::Imp
                     arg_schemas
                 }
                 };
+                let summary = method.attr.summary.clone();
                 let schema_method = quote! {{
                     let mut method_object = MethodObject::new(#rpc_name.to_string(), None);
                     let returns = ContentDescriptorOrReference::new_content_descriptor::<#returns>(
@@ -38,6 +38,7 @@ pub fn generate_schema_method(methods: &[MethodRegistration]) -> Result<syn::Imp
                     );
                     method_object.result = returns;
                     method_object.params = #arg_schemas;
+                    method_object.summary = Some(#summary.to_string());
                     method_object
                 }};
                 schema_methods.push(schema_method);

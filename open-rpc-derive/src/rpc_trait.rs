@@ -85,6 +85,7 @@ fn handle_trait(mut rpc_trait: ItemTrait) -> Result<proc_macro2::TokenStream> {
     let method_registrations = compute_method_registrations(&rpc_trait)?;
     let mod_name_ident = rpc_wrapper_mod_name(&rpc_trait.ident);
     let generate_schema_method = generate_schema_method(&method_registrations)?;
+      
     rpc_trait.items.push(parse_quote!(
         #[doc(hidden)]
         fn schema(&self) -> OpenrpcDocument;
