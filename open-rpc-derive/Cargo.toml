@@ -1,6 +1,6 @@
 [package]
 name = "open-rpc-derive"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["me@austbot.com","fikgol <hit.cs.lijun@gmail.com>"]
 edition = "2021"
 license = "MIT"
@@ -11,7 +11,7 @@ description = "OpenRPC Schema Generator"
 proc-macro2 = {version = "1.0.49"}
 syn = {version = "1.0.107", features = ["full","fold", "visit"]}
 quote = "1.0.23"
-open-rpc-schema = { version = "0.0.3", path = "../open-rpc-schema"}
+open-rpc-schema = { version = "0.0.4", path = "../open-rpc-schema"}
 
 [lib]
 proc-macro = true
